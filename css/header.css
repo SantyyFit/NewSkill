@@ -1,0 +1,89 @@
+/* Header fijo en la parte inferior */
+.header {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #262626;
+    border-top: 1px solid rgb(235, 225, 225);
+    z-index: 1000000;
+    padding: 8px 0;
+    width: 100%;
+}
+
+/* Contenedor principal de íconos */
+.listacontainer {
+    max-width: 100%;
+    margin: 0 auto;
+    overflow-x: auto;
+}
+
+/* Lista de navegación */
+.header_nav-list {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    width: 100%;
+    gap: 20px;
+    flex-wrap: nowrap;
+}
+
+/* Cada ítem (ícono) */
+.header_nav-item {
+    flex: 1;
+    text-align: center;
+}
+
+.header_nav-item a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px;
+    border-radius: 10px;
+    transition: transform 0.2s ease, background-color 0.3s;
+}
+
+/* Iconos */
+.header_nav-item img {
+    width: 24px;
+    height: 24px;
+    filter: brightness(1.2);
+    transition: filter 0.3s ease;
+    max-width: 100%;
+}
+
+/* Hover */
+.header_nav-item a:hover {
+    background-color: #333333;
+    transform: scale(1.1);
+}
+
+/* Icono activo (se cambia con PHP) */
+.header_nav-item a.active {
+    background-color: #00bcd4;
+    box-shadow: 0 0 10px #00bcd4;
+    border-radius: 12px;
+}
+
+/* RESPONSIVE: para celulares */
+@media (max-width: 600px) {
+    .header_nav-list {
+        gap: 10px;
+        padding: 0 10px;
+    }
+
+    .header_nav-item img {
+        width: 22px;
+        height: 22px;
+    }
+}
+
+@media (max-width: 400px) {
+    .header_nav-item img {
+        width: 20px;
+        height: 20px;
+    }
+}

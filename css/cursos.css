@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
+body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    background: #0f111a;
+    color: #fff;
+}
+
+.header-cursos {
+    padding: 30px 20px;
+    background: #1c2532;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.header-cursos h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: #60a5fa;
+}
+
+.cursos-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    padding: 40px 20px;
+}
+
+.curso {
+    background-size: cover;
+    background-position: center;
+    border-radius: 12px;
+    padding: 20px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    color: #fff;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease;
+}
+
+.curso h2 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.curso h2 a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.curso p {
+    font-size: 0.95rem;
+    margin-top: 8px;
+    opacity: 0.9;
+}
+
+.curso:hover {
+    transform: scale(1.02);
+}

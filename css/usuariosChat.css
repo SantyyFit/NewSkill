@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body.usuarios-body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #0e0e14;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Encabezado tipo app de chat --- */
+.usuarios-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #1a1a25;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #2a2a3e;
+    z-index: 999;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.usuarios-header h2 {
+    font-size: 1.8rem;
+    color: #00e0ff;
+    font-weight: 700;
+}
+
+.volver {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #00e0ff;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.volver:hover {
+    color: #4cd4ff;
+}
+
+/* --- Lista de usuarios como burbujas de chat --- */
+.usuarios-container {
+    margin-top: 80px;
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.usuario {
+    position: relative;
+    background: #1a1d2b;
+    border-radius: 20px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    transition: transform 0.2s ease, background 0.3s ease;
+    cursor: pointer;
+    border-left: 4px solid transparent;
+}
+
+.usuario:hover {
+    background: #00bcd4;
+    transform: translateY(-2px);
+    border-left-color: #00e0ff;
+}
+
+.usuario:hover a {
+    color: #121212;
+}
+
+.usuario a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 1.05rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+/* --- Foto de perfil tipo app moderna --- */
+.foto-perfil {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #00bcd4;
+    box-shadow: 0 0 6px #00e0ff66;
+}
+
+/* --- Separador --- */
+.usuario::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 20%;
+    width: 60%;
+    height: 1px;
+    background-color: #2a2a40;
+}
+
+/* --- Mobile Friendly --- */
+@media (max-width: 768px) {
+    .usuarios-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 14px 16px;
+        gap: 4px;
+    }
+
+    .usuarios-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .usuario {
+        padding: 12px 14px;
+        border-radius: 16px;
+    }
+
+    .usuario a {
+        font-size: 1rem;
+    }
+
+    .foto-perfil {
+        width: 46px;
+        height: 46px;
+    }
+}
+
+@media (max-width: 480px) {
+    .usuarios-container {
+        padding: 16px 12px;
+    }
+
+    .usuario {
+        padding: 10px 12px;
+    }
+
+    .usuario a {
+        font-size: 0.95rem;
+    }
+
+    .foto-perfil {
+        width: 42px;
+        height: 42px;
+    }
+}
