@@ -24,6 +24,7 @@ if (!$clase) {
     exit();
 }
 
+
 // Obtener materiales
 $stmt = $pdo->prepare("
     SELECT tipo, contenido
