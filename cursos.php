@@ -4,6 +4,8 @@ include_once 'includes/PDOdb.php';
 include_once './includes/head.php';
 $usuario = $_GET['user'];
 $i = $_GET['i'];
+$id_usuario = $_SESSION['idusuario'];
+
 ?>
 
 <!DOCTYPE html>
@@ -215,13 +217,22 @@ $i = $_GET['i'];
   $stmt->execute([$id_usuario]);
   $clasesCreadas = $stmt->fetchAll();
 
-  if ($clasesCreadas) {
-      foreach ($clasesCreadas as $clase) {
-          echo "<li><strong>".htmlspecialchars($clase['titulo'])."</strong> - ".htmlspecialchars($clase['fecha_creacion'])."</li>";
-      }
-  } else {
-      echo "<li>No has creado clases aún.</li>";
-  }
+if ($clasesCreadas) {
+    foreach ($clasesCreadas as $clase) {
+        $titulo = htmlspecialchars($clase['titulo']);
+        $fecha = htmlspecialchars($clase['fecha_creacion']);
+        $id = $clase['id_clase'];
+
+     echo "<li style='margin-bottom: 10px;'>
+    📘 <a href='ver_clase.php?id=$id' style='color:#60a5fa; font-weight:bold; text-decoration:none;'>
+        $titulo
+    </a>
+    <span style='color:#94a3b8; font-size: 0.9em;'> - $fecha</span>
+</li>";
+    }
+} else {
+    echo "<li>No has creado clases aún.</li>";
+}
   ?>
   </ul>
 </div>
