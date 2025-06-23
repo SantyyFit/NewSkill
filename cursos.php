@@ -6,6 +6,8 @@ $usuario = $_GET['user'];
 $i = $_GET['i'];
 $id_usuario = $_SESSION['idusuario'];
 
+
+
 ?>
 
 <!DOCTYPE html>
@@ -175,27 +177,54 @@ $id_usuario = $_SESSION['idusuario'];
 <button id="btnCrearClase">Crear nueva clase</button>
 
 <!-- Formulario oculto -->
-<div id="formularioCrearClase" class="form-crear">
-  <h2>Crear nueva clase</h2>
+<div id="formularioCrearClase" class="form-crear" style="max-width:500px; margin:auto; background:#1e293b; padding:20px; border-radius:8px; color:#e2e8f0; font-family:sans-serif;">
+  <h2 style="color:#60a5fa;">Crear nueva clase</h2>
   <form action="crear_clase.php" method="POST" enctype="multipart/form-data">
-      <label>Título:</label>
-      <input type="text" name="titulo" required>
+      <label for="titulo">Título:</label><br>
+      <input type="text" id="titulo" name="titulo" required style="width:100%; padding:8px; border-radius:4px; border:none; margin-bottom:15px;">
 
-      <label>Descripción:</label>
-      <textarea name="descripcion" rows="5" required></textarea>
+      <label for="descripcion">Descripción:</label><br>
+      <textarea id="descripcion" name="descripcion" rows="5" required style="width:100%; padding:8px; border-radius:4px; border:none; margin-bottom:15px;"></textarea>
 
-      <label>Visibilidad:</label>
-      <select name="visibilidad">
+      <label for="visibilidad">Visibilidad:</label><br>
+      <select id="visibilidad" name="visibilidad" style="width:100%; padding:8px; border-radius:4px; border:none; margin-bottom:15px;">
           <option value="privada">Privada</option>
           <option value="publica">Pública</option>
       </select>
 
-      <label>Materiales:</label>
-      <input type="file" name="materiales[]" multiple>
+      <label for="materiales">Materiales:</label><br>
+      <input type="file" id="materiales" name="materiales[]" multiple style="margin-bottom:8px;">
 
-      <button type="submit" name="crear_clase">Crear clase</button>
+      <div id="lista-archivos" style="color:#60a5fa; font-family: monospace; min-height: 20px; margin-bottom: 20px;">
+        No has seleccionado archivos.
+      </div>
+
+      <button type="submit" name="crear_clase" style="background:#2563eb; color:#e2e8f0; padding:10px 20px; border:none; border-radius:5px; cursor:pointer; font-weight:bold;">
+        Crear clase
+      </button>
   </form>
 </div>
+
+<script>
+  const inputArchivos = document.getElementById('materiales');
+  const listaArchivos = document.getElementById('lista-archivos');
+
+  inputArchivos.addEventListener('change', () => {
+    const archivos = inputArchivos.files;
+    if (archivos.length === 0) {
+      listaArchivos.textContent = 'No has seleccionado archivos.';
+      return;
+    }
+
+    let nombres = [];
+    for (let i = 0; i < archivos.length; i++) {
+      nombres.push(archivos[i].name);
+    }
+
+    listaArchivos.textContent = 'Archivos seleccionados: ' + nombres.join(', ');
+  });
+</script>
+
 
 <!-- Botones para alternar -->
 <div style="max-width:600px; width: 100%; margin-bottom: 20px;">
