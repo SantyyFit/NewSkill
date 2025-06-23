@@ -252,12 +252,12 @@ if ($clasesCreadas) {
         $fecha = htmlspecialchars($clase['fecha_creacion']);
         $id = $clase['id_clase'];
 
-     echo "<li style='margin-bottom: 10px;'>
-    📘 <a href='ver_clase.php?id=$id' style='color:#60a5fa; font-weight:bold; text-decoration:none;'>
-        $titulo
-    </a>
-    <span style='color:#94a3b8; font-size: 0.9em;'> - $fecha</span>
+echo "<li style='margin-bottom: 10px;'>
+  📘 <a href='ver_clase.php?id=$id' style='color:#60a5fa; font-weight:bold; text-decoration:none;'>$titulo</a>
+  <span style='color:#94a3b8; font-size: 0.9em;'> - $fecha</span>
+  <button onclick=\"abrirModalCompartir($id, '$titulo')\" style='margin-left:10px; background:#3b82f6; color:white; padding:4px 8px; border:none; border-radius:4px; font-size:0.9em;'>Compartir</button>
 </li>";
+
     }
 } else {
     echo "<li>No has creado clases aún.</li>";
@@ -283,7 +283,14 @@ if ($clasesCreadas) {
 
   if ($clasesRecibidas) {
       foreach ($clasesRecibidas as $clase) {
-          echo "<li><strong>".htmlspecialchars($clase['titulo'])."</strong> de ".htmlspecialchars($clase['creador'])."</li>";
+          $id = $clase['id_clase'];
+          $titulo = htmlspecialchars($clase['titulo']);
+          $creador = htmlspecialchars($clase['creador']);
+
+          echo "<li style='margin-bottom:10px;'>
+                📥 <a href='ver_clase.php?id=$id' style='color:#60a5fa; font-weight:bold; text-decoration:none;'>$titulo</a>
+                <span style='color:#94a3b8; font-size: 0.9em;'> de $creador</span>
+                </li>";
       }
   } else {
       echo "<li>Aún no has recibido clases de otros usuarios.</li>";
@@ -291,6 +298,7 @@ if ($clasesCreadas) {
   ?>
   </ul>
 </div>
+
 
 <script>
   const btnCrear = document.getElementById('btnCrearClase');
@@ -321,6 +329,44 @@ if ($clasesCreadas) {
     btn.classList.add('active');
   }
 </script>
+
+<script>
+function abrirModalCompartir(idClase, titulo) {
+  document.getElementById('inputIdClase').value = idClase;
+  document.getElementById('tituloClaseModal').textContent = titulo;
+  document.getElementById('modalCompartir').style.display = 'flex';
+}
+
+function cerrarModal() {
+  document.getElementById('modalCompartir').style.display = 'none';
+}
+</script>
+
+
+<div id="modalCompartir" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#000000cc; z-index:9999; align-items:center; justify-content:center;">
+  <div style="background:#1e293b; padding:25px; border-radius:10px; width:90%; max-width:400px; color:#e2e8f0; position:relative;">
+    <span onclick="cerrarModal()" style="position:absolute; top:10px; right:15px; cursor:pointer; color:#94a3b8;">✖</span>
+    <h3 style="color:#60a5fa; margin-bottom:15px;">Compartir clase: <span id="tituloClaseModal"></span></h3>
+
+    <form action="compartir_clase.php" method="POST">
+        <input type="hidden" name="id_clase" id="inputIdClase">
+
+        <label>Nombre del usuario:</label>
+        <input type="text" name="nombre_usuario" required style="width:100%; padding:8px; border-radius:5px; margin-bottom:10px; border:none; background:#334155; color:#e2e8f0;">
+
+        <label>Permiso:</label>
+        <select name="permiso" style="width:100%; padding:8px; border-radius:5px; margin-bottom:20px; background:#334155; color:#e2e8f0; border:none;">
+            <option value="lectura">Lectura</option>
+            <option value="editable">Editable</option>
+        </select>
+
+        <button type="submit" style="background:#38bdf8; color:#1e293b; padding:10px; width:100%; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">
+            Compartir clase
+        </button>
+    </form>
+  </div>
+</div>
+
 
 </body>
 
