@@ -17,6 +17,8 @@ if (!isset($_SESSION['idusuario'])) {
     exit();
 }
 
+
+
 $id_usuario = $_SESSION['idusuario'];
 
 // Procesar formulario
