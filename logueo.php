@@ -16,7 +16,7 @@ if (mysql_num_rows($resultado) > 0) {
     $_SESSION["idusuario"] = $idUsuario;
 
     $key = "clave_secreta";
-    $hash = md5($key . $idUsuario);
+    $hash = md5($idUsuario);
 
     header("Location: inicio.php?user=" . urlencode($usuario) . "&i=" . $hash);
 } else {

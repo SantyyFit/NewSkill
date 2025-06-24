@@ -11,9 +11,9 @@
             <div class="foto-perfi-contenedor">
                 <?php
                 $idUsuario = $_GET["i"];
+                
                 $query = "SELECT * FROM usuarios WHERE MD5(idusuario) = '$idUsuario'";
                 $resultt = mysql_query($query, $conexion);
-
                 while ($f = mysql_fetch_array($resultt)) {
                     $idusuarioLimpio = $f["idusuario"];
                     $Nombre = $f["usuario"];
@@ -24,7 +24,9 @@
                 }
                 ?>
                 <img src="<?= $rutaimagen ?>" id="perfil-foto" class="perfil-img" alt="Foto de perfil">
+                
             </div>
+            <? echo "aqui ruta; ".$query?>
 
             <!-- Modal para ampliar imagen -->
             <div id="modal-foto" class="modal-foto">
