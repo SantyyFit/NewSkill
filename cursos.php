@@ -16,6 +16,9 @@ $id_usuario = $_SESSION['idusuario'];
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Mi Repositorio - NewSkill</title>
+<!-- Quill CSS -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
 <style>
   /* Reset básico */
   * {
@@ -174,56 +177,7 @@ $id_usuario = $_SESSION['idusuario'];
 
 <h1>Mi Repositorio</h1>
 
-<button id="btnCrearClase">Crear nueva clase</button>
-
-<!-- Formulario oculto -->
-<div id="formularioCrearClase" class="form-crear" style="max-width:500px; margin:auto; background:#1e293b; padding:20px; border-radius:8px; color:#e2e8f0; font-family:sans-serif;">
-  <h2 style="color:#60a5fa;">Crear nueva clase</h2>
-  <form action="crear_clase.php" method="POST" enctype="multipart/form-data">
-      <label for="titulo">Título:</label><br>
-      <input type="text" id="titulo" name="titulo" required style="width:100%; padding:8px; border-radius:4px; border:none; margin-bottom:15px;">
-
-      <label for="descripcion">Descripción:</label><br>
-      <textarea id="descripcion" name="descripcion" rows="5" required style="width:100%; padding:8px; border-radius:4px; border:none; margin-bottom:15px;"></textarea>
-
-      <label for="visibilidad">Visibilidad:</label><br>
-      <select id="visibilidad" name="visibilidad" style="width:100%; padding:8px; border-radius:4px; border:none; margin-bottom:15px;">
-          <option value="privada">Privada</option>
-          <option value="publica">Pública</option>
-      </select>
-
-      <label for="materiales">Materiales:</label><br>
-      <input type="file" id="materiales" name="materiales[]" multiple style="margin-bottom:8px;">
-
-      <div id="lista-archivos" style="color:#60a5fa; font-family: monospace; min-height: 20px; margin-bottom: 20px;">
-        No has seleccionado archivos.
-      </div>
-
-      <button type="submit" name="crear_clase" style="background:#2563eb; color:#e2e8f0; padding:10px 20px; border:none; border-radius:5px; cursor:pointer; font-weight:bold;">
-        Crear clase
-      </button>
-  </form>
-</div>
-
-<script>
-  const inputArchivos = document.getElementById('materiales');
-  const listaArchivos = document.getElementById('lista-archivos');
-
-  inputArchivos.addEventListener('change', () => {
-    const archivos = inputArchivos.files;
-    if (archivos.length === 0) {
-      listaArchivos.textContent = 'No has seleccionado archivos.';
-      return;
-    }
-
-    let nombres = [];
-    for (let i = 0; i < archivos.length; i++) {
-      nombres.push(archivos[i].name);
-    }
-
-    listaArchivos.textContent = 'Archivos seleccionados: ' + nombres.join(', ');
-  });
-</script>
+<button id="btnCrearClase"><a href="editar_clase.php" style="text-decoration: none; color:white">Crear Clase</a></button>
 
 
 <!-- Botones para alternar -->
@@ -341,6 +295,9 @@ function cerrarModal() {
   document.getElementById('modalCompartir').style.display = 'none';
 }
 </script>
+
+
+
 
 
 <div id="modalCompartir" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#000000cc; z-index:9999; align-items:center; justify-content:center;">

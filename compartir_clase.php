@@ -5,6 +5,7 @@ error_reporting(E_ALL);
 
 session_start();
 include_once 'includes/PDOdb.php';
+include_once 'notificaciones.php';
 
 if (!isset($_SESSION['idusuario'])) {
     header("Location: login.php");
@@ -43,7 +44,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare("INSERT INTO repositorio (id_usuario, id_clase, permiso, fecha_agregado) VALUES (?, ?, ?, NOW())");
         $stmt->execute([$id_destino, $id_clase, $permiso]);
 
-        echo "<script>alert('Clase compartida correctamente con $nombre_usuario.'); window.location.href='repositorio.php';</script>";
+
+          // Obtener título de la clase
+$stmtClase = $pdo->prepare("SELECT titulo FROM clases WHERE id_clase = ?");
+$stmtClase->execute([$id_clase]);
+$tituloClase = $stmtClase->fetchColumn();
+
+// Crear notificación
+$mensajeNotif = "Te han compartido la clase: $tituloClase ";
+$urlNotif = "ver_clase.php?id=$id_clase";
+crearNotificacion($id_destino, 'clase_compartida', $mensajeNotif, $urlNotif, $pdo);
+
+
+
+   echo "<script>alert('Clase compartida correctamente con $nombre_usuario.'); window.history.back();</script>";
+
         exit;
     } else {
         echo "<script>alert('Usuario no encontrado.'); window.history.back();</script>";

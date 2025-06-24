@@ -40,6 +40,8 @@ $materiales = $stmt->fetchAll();
 <head>
 <meta charset="UTF-8">
 <title><?= htmlspecialchars($clase['titulo']) ?> - NewSkill</title>
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
 <style>
     body {
         background: #0f172a;
@@ -79,7 +81,11 @@ $materiales = $stmt->fetchAll();
 <div class="contenedor">
     <h1><?= htmlspecialchars($clase['titulo']) ?></h1>
     <p><strong>Por:</strong> <?= htmlspecialchars($clase['creador_nombre']) ?></p>
-    <p><strong>Descripción:</strong> <?= nl2br(htmlspecialchars($clase['descripcion'])) ?></p>
+    <p><strong>Descripción:</strong></p>
+<div class="ql-editor" style="background:white; color:black; padding:10px; border-radius:8px;">
+  <?= $clase['descripcion']; ?>
+</div>
+
 
     <hr>
 

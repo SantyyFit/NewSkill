@@ -79,6 +79,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crear_clase'])) {
     window.history.back();
 </script>";
 exit();
+exit;
+
 
 }
 ?>
