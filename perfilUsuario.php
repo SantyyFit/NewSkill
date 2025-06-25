@@ -9,6 +9,11 @@ $idUsuarioB = $_GET['idUsuarioB'];
 $querybuscausuario = "SELECT * FROM usuarios WHERE idusuario = '$idUsuarioB'";
 $consulta = mysql_query($querybuscausuario, $conexion);
 
+if (mysql_num_rows($consulta) === 0) {
+    echo "<p>Usuario no encontrado.</p>";
+    exit();
+}
+
 while ($row = mysql_fetch_array($consulta)) {
     $usuarioencontrado = $row["usuario"];
     $nombreencontrado = $row["nombre"];
@@ -17,7 +22,20 @@ while ($row = mysql_fetch_array($consulta)) {
     $nivel = $row["nivel"];  
     $telefono = $row["numero_telefono"]; 
 }
+
+$yo = $_SESSION['idusuario'];
+$ya_sigue = false;
+
+$seguirConsulta = mysql_query("SELECT * FROM seguidores WHERE id_usuario = $yo AND id_seguido = $idUsuarioB", $conexion);
+if (mysql_num_rows($seguirConsulta) > 0) {
+    $ya_sigue = true;
+}
+
+// Contador de seguidores
+$seguidores = mysql_query("SELECT COUNT(*) as total FROM seguidores WHERE id_seguido = $idUsuarioB", $conexion);
+$seguidores_count = mysql_fetch_assoc($seguidores)['total'];
 ?>
+
 <link rel="stylesheet" href="css/perfilUsuario.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -34,7 +52,7 @@ while ($row = mysql_fetch_array($consulta)) {
                 <img src="<?= $fotoperfil ?>" alt="Foto de perfil" onclick="expandirImagen('<?= $fotoperfil ?>')">
             </div>
             <div class="datos-perfil_contenedor">
-                <p>Seguidores 0</p>
+                <p><a href="verSeguidores.php?id=<?= $idUsuarioB ?>" class="link-seguidores">Seguidores <?= $seguidores_count ?></a></p>
                 <p>Publicaciones 0</p>
                 <p>Habilidades 3</p>
                 <p>Cursos 2</p>
@@ -53,6 +71,13 @@ while ($row = mysql_fetch_array($consulta)) {
             <div class="perzonalizar-contenedor">
                 <div class="Editar-perfil">
                     <p><a href="chat.php?user=<?= $_GET['user'] ?>&id=<?= $idUsuarioB ?>&i=<?= $_GET['i'] ?>">Contactar</a></p>
+                </div>
+                <div class="Editar-perfil">
+                    <?php if ($yo != $idUsuarioB): ?>
+                    <button id="boton-seguir" data-id="<?= $idUsuarioB ?>" class="boton-seguir">
+                        <?= $ya_sigue ? "Siguiendo" : "Seguir" ?>
+                    </button>
+                    <?php endif; ?>
                 </div>
             </div>
             <div class="habilidades-contenedor">
@@ -105,6 +130,32 @@ while ($row = mysql_fetch_array($consulta)) {
                 document.getElementById("modalFoto").style.display = "none";
             }
         }
+
+        document.getElementById('boton-seguir')?.addEventListener('click', function () {
+            const boton = this;
+            const idUsuario = boton.getAttribute('data-id');
+
+            fetch('seguir_ajax.php?id=' + idUsuario)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+
+                boton.textContent = data.accion === 'siguiendo' ? 'Siguiendo' : 'Seguir';
+
+                const linkSeguidores = document.querySelector('.link-seguidores');
+                if (linkSeguidores) {
+                    linkSeguidores.textContent = 'Seguidores ' + data.seguidores_count;
+                    linkSeguidores.href = 'verSeguidores.php?id=' + idUsuario;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al procesar la solicitud.');
+            });
+        });
     </script>
 </body>
 
