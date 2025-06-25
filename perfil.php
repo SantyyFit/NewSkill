@@ -74,8 +74,8 @@ $seguidos_count = mysql_fetch_assoc($seguidos)['total'];
             </div>
 
             <div class="datos-perfil_contenedor">
-                <p><a href="verSeguidores.php?id=<?= $idusuarioLimpio ?>" class="link-seguidores">Seguidores <?= $seguidores_count ?></a></p>
-                <p><a href="verSeguidos.php?id=<?= $idusuarioLimpio ?>" class="link-seguidos">Seguidos <?= $seguidos_count ?></a></p>
+                <p><a href="verSeguidores.php?id=<?= $idusuarioLimpio ?>&user=<?=$_GET['user']?>&i=<?=$_GET ['i']?>" class="link-seguidores">Seguidores <?= $seguidores_count ?></a></p>
+                <p><a href="verSeguidos.php?id=<?= $idusuarioLimpio ?>&user=<?=$_GET['user']?>&i=<?=$_GET ['i']?>" class="link-seguidos">Seguidos <?= $seguidos_count ?></a></p>
                 <p>Publicaciones 0</p>
                 <p>Habilidades 3</p>
                 <p>Cursos 2</p>

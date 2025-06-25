@@ -52,7 +52,7 @@ $seguidores_count = mysql_fetch_assoc($seguidores)['total'];
                 <img src="<?= $fotoperfil ?>" alt="Foto de perfil" onclick="expandirImagen('<?= $fotoperfil ?>')">
             </div>
             <div class="datos-perfil_contenedor">
-                <p><a href="verSeguidores.php?id=<?= $idUsuarioB ?>" class="link-seguidores">Seguidores <?= $seguidores_count ?></a></p>
+                <p><a href="verSeguidores.php?id=<?= $idUsuarioB ?>&user=<?=$_GET['user']?>&i=<?=$_GET ['i']?>" class="link-seguidores">Seguidores <?= $seguidores_count ?></a></p>
                 <p>Publicaciones 0</p>
                 <p>Habilidades 3</p>
                 <p>Cursos 2</p>

@@ -10,9 +10,11 @@ if (!isset($_SESSION['idusuario'])) {
 include_once 'includes/head.php';
 
 $idusuario = intval($_GET['id']);
+$user= $_GET['user'];
+$i= $_GET['i'];
 
 $query = "
-SELECT u.usuario, u.img_perfil 
+SELECT u.usuario, u.img_perfil, u.idusuario 
 FROM seguidores s 
 JOIN usuarios u ON u.idusuario = s.id_seguido 
 WHERE s.id_usuario = $idusuario
@@ -34,7 +36,7 @@ $consulta = mysql_query($query, $conexion);
                 while ($row = mysql_fetch_array($consulta)) {
                     echo "<li class='seguidor-item'>";
                     echo "<img src='{$row['img_perfil']}' width='40' alt='Perfil'>";
-                    echo "<span>{$row['usuario']}</span>";
+                    echo "<a href='perfilUsuario.php?user={$user}&UsuarioB={$row['usuario']}&idUsuarioB={$row['idusuario']}&i={$i}' style='color:white; text-decoration:none;'>{$row['usuario']}</a>";
                     echo "</li>";
                 }
             }
