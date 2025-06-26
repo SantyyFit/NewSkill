@@ -38,7 +38,7 @@ if ($f = $stmt->fetch(PDO::FETCH_ASSOC)) {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <link rel="icon" href="imagenes/logons50.png">
