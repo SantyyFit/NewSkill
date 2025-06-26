@@ -2,6 +2,7 @@
 include_once 'includes/session.php';
 include_once 'includes/PDOdb.php';
 include_once './includes/head.php';
+include_once 'includes/insignias_helper.php';
 
 $usuario = $_GET['user'];
 $i = $_GET['i'];
@@ -38,14 +39,17 @@ $id_usuario = $_SESSION['idusuario'];
     <h2>📘 Clases que he creado</h2>
     <ul>
     <?php
-    $stmt = $pdo->prepare("
-        SELECT c.id_clase, c.titulo, c.fecha_creacion
-        FROM clases c
-        WHERE c.id_creador = ?
-        ORDER BY c.fecha_creacion DESC
-    ");
-    $stmt->execute([$id_usuario]);
-    $clasesCreadas = $stmt->fetchAll();
+   $stmt = $pdo->prepare("
+    SELECT c.id_clase, c.titulo, c.fecha_creacion,
+           CASE WHEN f.id IS NOT NULL THEN 1 ELSE 0 END AS es_favorita
+    FROM clases c
+    LEFT JOIN favoritos f ON f.id_clase = c.id_clase AND f.id_usuario = ?
+    WHERE c.id_creador = ?
+    ORDER BY es_favorita DESC, c.fecha_creacion DESC
+");
+$stmt->execute([$id_usuario, $id_usuario]);
+$clasesCreadas = $stmt->fetchAll();
+
 
     if ($clasesCreadas) {
         foreach ($clasesCreadas as $clase) {
@@ -53,11 +57,15 @@ $id_usuario = $_SESSION['idusuario'];
             $fecha = htmlspecialchars($clase['fecha_creacion']);
             $id = $clase['id_clase'];
 
-            echo "<li>
-                    📘 <a href='ver_clase.php?id=$id' style='color:#60a5fa; font-weight:bold; text-decoration:none;'>$titulo</a>
-                    <span style='color:#94a3b8; font-size: 0.9em;'> - $fecha</span>
-                    <button onclick=\"abrirModalCompartir($id, '$titulo')\">Compartir</button>
-                  </li>";
+           $estrella = $clase['es_favorita'] ? '★' : '☆'; // llena o vacía
+
+echo "<li style='margin-bottom: 10px; position: relative;'>
+  📘<a href='ver_clase.php?id=$id' style='color:#60a5fa; font-weight:bold; text-decoration:none;'>$titulo</a>
+  <span style='color:#94a3b8; font-size: 0.9em;'> - $fecha</span>
+  <button onclick=\"abrirModalCompartir($id, '$titulo')\" style='margin-left:10px; background:#3b82f6; color:white; padding:4px 8px; border:none; border-radius:4px; font-size:0.9em;'>Compartir</button>
+  <span class='estrella-favorito' data-id='$id' style='position:absolute; right:10px; top:12px; cursor:pointer; font-size:18px;'>$estrella</span>
+</li>";
+
         }
     } else {
         echo "<li>No has creado clases aún.</li>";
@@ -70,16 +78,20 @@ $id_usuario = $_SESSION['idusuario'];
     <h2>📥 Clases que me han compartido</h2>
     <ul>
     <?php
-    $stmt = $pdo->prepare("
-        SELECT c.id_clase, c.titulo, u.usuario AS creador
-        FROM repositorio r
-        JOIN clases c ON r.id_clase = c.id_clase
-        JOIN usuarios u ON c.id_creador = u.idusuario
-        WHERE r.id_usuario = ? AND c.id_creador != ?
-        ORDER BY r.fecha_agregado DESC
-    ");
-    $stmt->execute([$id_usuario, $id_usuario]);
-    $clasesRecibidas = $stmt->fetchAll();
+ $stmt = $pdo->prepare("
+    SELECT c.id_clase, c.titulo, u.usuario AS creador,
+           CASE WHEN f.id IS NOT NULL THEN 1 ELSE 0 END AS es_favorita
+    FROM repositorio r
+    JOIN clases c ON r.id_clase = c.id_clase
+    JOIN usuarios u ON c.id_creador = u.idusuario
+    LEFT JOIN favoritos f ON f.id_clase = c.id_clase AND f.id_usuario = ?
+    WHERE r.id_usuario = ? AND c.id_creador != ?
+    ORDER BY es_favorita DESC, r.fecha_agregado DESC
+");
+$stmt->execute([$id_usuario, $id_usuario, $id_usuario]);
+$clasesRecibidas = $stmt->fetchAll();
+
+
 
     if ($clasesRecibidas) {
         foreach ($clasesRecibidas as $clase) {
@@ -87,10 +99,14 @@ $id_usuario = $_SESSION['idusuario'];
             $titulo = htmlspecialchars($clase['titulo']);
             $creador = htmlspecialchars($clase['creador']);
 
-            echo "<li>
-                    📥 <a href='ver_clase.php?id=$id' style='color:#60a5fa; font-weight:bold; text-decoration:none;'>$titulo</a>
-                    <span style='color:#94a3b8; font-size: 0.9em;'> de $creador</span>
-                  </li>";
+            $estrella = $clase['es_favorita'] ? '★' : '☆';
+
+echo "<li style='margin-bottom:10px; position: relative;'>
+  📥 <a href='ver_clase.php?id=$id' style='color:#60a5fa; font-weight:bold; text-decoration:none;'>$titulo</a>
+  <span style='color:#94a3b8; font-size: 0.9em;'> de $creador</span>
+  <span class='estrella-favorito' data-id='$id' style='position:absolute; right:10px; top:12px; cursor:pointer; font-size:18px;'>$estrella</span>
+</li>";
+
         }
     } else {
         echo "<li>Aún no has recibido clases de otros usuarios.</li>";
@@ -171,6 +187,27 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     document.getElementById('modalCompartir').style.display = 'none';
   }
 </script>
+
+<script>
+document.querySelectorAll('.estrella-favorito').forEach(estrella => {
+  estrella.addEventListener('click', () => {
+    const idClase = estrella.dataset.id;
+    
+    fetch('toggle_favorito.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'id_clase=' + encodeURIComponent(idClase)
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        estrella.textContent = data.es_favorita ? '★' : '☆';
+      }
+    });
+  });
+});
+</script>
+
 
 </body>
 </html>

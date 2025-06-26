@@ -6,6 +6,7 @@ error_reporting(E_ALL);
 session_start();
 include_once 'includes/PDOdb.php';
 include_once 'notificaciones.php';
+include_once 'includes/insignias_helper.php';
 
 if (!isset($_SESSION['idusuario'])) {
     header("Location: login.php");
@@ -43,6 +44,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Insertar en repositorio
         $stmt = $pdo->prepare("INSERT INTO repositorio (id_usuario, id_clase, permiso, fecha_agregado) VALUES (?, ?, ?, NOW())");
         $stmt->execute([$id_destino, $id_clase, $permiso]);
+
+        // Insertar en clases_compartidas
+        $stmtCompartida = $pdo->prepare("INSERT INTO clases_compartidas (id_emisor, id_receptor, id_clase, fecha_compartida) VALUES (?, ?, ?, NOW())");
+        $stmtCompartida->execute([$id_emisor, $id_destino, $id_clase]);
+
+        asignarInsignia($pdo, $id_emisor, 'compartidas');
+asignarInsignia($pdo, $id_destino, 'recibidas');
+
+
+
+
 
 
           // Obtener título de la clase
